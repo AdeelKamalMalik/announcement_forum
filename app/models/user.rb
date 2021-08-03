@@ -9,6 +9,10 @@ class User < ApplicationRecord
   ## callbacks
   before_save :assign_expiry
 
+  ## Relationships
+  has_many :posts, dependent: :destroy
+  has_many :comments, dependent: :destroy
+
   def sign_in(password)
     response = AuthenticateUser.new(email, password).call
     self.auth_token = response.token
