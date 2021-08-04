@@ -1,16 +1,15 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: [:update, :destroy]
-  before_action :set_post, only: [:index, :show]
+  before_action :set_post, only: [:index]
 
   def index
-    @comments = current_user.comments
-    @comments = @comments.of_post(@post.id) if @post
+    @comments = current_user.comments unless @post
+    @comments = Comment.of_post(@post.id) if @post
     render json: @comments, status: :ok
   end
 
   def show
-    comment = @post.comments.find_by(id: params[:id]) if @post
-    comment = Comment.find_by(id: params[:id]) unless @post
+    comment = Comment.find_by(id: params[:id])
     if comment
       render json: comment, status: :ok
     else

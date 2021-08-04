@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :comments
   resources :posts do
-    resources :comments, only: %i[show index]
+    resources :comments, only: %i[index]
   end
   post '/sign_up', to: 'auth#sign_up'
   post '/sign_in', to: 'auth#sign_in'
