@@ -64,4 +64,80 @@ RSpec.describe AuthController, type: :controller do
     end
 
   end
+
+  describe '#sign_in' do
+    let!(:user) { create :user, email: email }
+    let(:params) { { email: email, password: password } }
+    let(:response_data) { JSON.parse(response.body) }
+    before { post :sign_in, params: params }
+    describe 'when credentials are valid' do
+      let(:email) { 'test@mail.com' }
+      let(:password) { 'password' }
+      it 'does successfully signed in' do
+        expect(response.status).to eq(200)
+      end
+
+      it 'does have auth_token and expiry' do
+        expect(response_data['auth_token']).to be_present
+        expect(response_data['expiry']).to be_present
+      end
+
+      it 'does have the same email' do
+        expect(response_data['email']).to eq(email)
+      end
+    end
+    describe 'when credentials are invalid' do
+      context 'if email is not correct' do
+        let(:email) { 'test@mail.com' }
+        let(:incorrect_email) { 'incorrect@mail.com' }
+        let(:error) { 'invalid credentials' }
+        let(:password) { 'password' }
+        let(:params) { { email: incorrect_email, password: password } }
+        it 'does have unauthorized status' do
+          expect(response.status).to eq(401)
+        end
+        it 'does have error of invalid credentials' do
+          expect(response_data['errors']).to eq(error)
+        end
+      end
+      context 'if password is not correct' do
+        let(:email) { 'test@mail.com' }
+        let(:error) { 'invalid credentials' }
+        let(:password) { 'password' }
+        let(:incorrect_password) { 'incorrect_password' }
+        let(:params) { { email: email, password: incorrect_password } }
+        it 'does have unauthorized status' do
+          expect(response.status).to eq(401)
+        end
+        it 'does have error of invalid credentials' do
+          expect(response_data['errors']).to eq(error)
+        end
+      end
+    end
+  end
+
+  describe '#sign_out' do
+    let(:user) { create :user }
+    let(:response_data) { JSON.parse(response.body) }
+    let(:password) { 'password' }
+    let(:message) { I18n.t('auth.signed_out') }
+    let(:unauthorized_error) { 'you need to sign in before continue' }
+    before do
+      post :sign_in, params: { email: user.email, password: password }
+      request.headers.merge!(Authorization: token)
+      delete :sign_out
+    end
+    context 'if authorized user' do
+      let(:token) { user.reload.auth_token }
+      it 'does sign out successfully' do
+        expect(response_data['message']).to eq(message)
+      end
+    end
+    context 'if unauthorized user' do
+      let(:token) { 'invalidtoken' }
+      it 'does have error message' do
+        expect(response_data['error']).to eq(unauthorized_error)
+      end
+    end
+  end
 end

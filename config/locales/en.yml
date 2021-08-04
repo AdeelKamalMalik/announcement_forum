@@ -39,3 +39,4 @@ en:
   auth:
     invalid_credentials: 'invalid credentials'
     not_signed_in: 'you need to sign in before continue'
+    signed_out: 'Sign out successfully'

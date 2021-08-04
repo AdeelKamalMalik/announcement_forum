@@ -25,7 +25,7 @@ class AuthController < ApplicationController
       current_user.auth_token = nil
       current_user.expiry = nil
       current_user.save(validate: false)
-      render json: { message: 'Sign out successfully' }
+      render json: { message: I18n.t('auth.signed_out') }
     end
   end
 
