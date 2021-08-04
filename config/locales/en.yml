@@ -30,4 +30,12 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  comments:
+    not_found: 'unable to find comment'
+    deleted: 'successfully deleted'
+  posts:
+    not_found: 'unable to find post'
+    deleted: 'successfully deleted'
+  auth:
+    invalid_credentials: 'invalid credentials'
+    not_signed_in: 'you need to sign in before continue'

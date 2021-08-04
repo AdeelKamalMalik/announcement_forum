@@ -7,8 +7,12 @@ class PostsController < ApplicationController
   end
 
   def show
-    post = Post.find(params[:id])
-    render json: post, status: :ok
+    post = Post.find_by(id: params[:id])
+    if post
+      render json: post, status: :ok
+    else
+      render json: { error: I18n.t('posts.not_found') }, status: :not_found
+    end
   end
 
   def create
@@ -31,7 +35,7 @@ class PostsController < ApplicationController
 
   def destroy
     if @post.destroy
-      render json: { message: 'successfully Deleted' }, status: :ok
+      render json: { message: I18n.t('posts.deleted') }, status: :ok
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -42,7 +46,7 @@ class PostsController < ApplicationController
   def set_post
     @post = current_user.posts.find_by(id: params[:id])
     unless @post
-      render json: { error: 'unable to find posts' }, status: :not_found
+      render json: { error: I18n.t('posts.not_found') }, status: :not_found
     end
   end
 

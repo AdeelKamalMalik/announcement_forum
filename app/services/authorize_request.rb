@@ -25,7 +25,7 @@ class AuthorizeRequest
   attr_reader :headers
 
   def unauthorized_error
-    OpenStruct.new(success?: false, result: nil, error: 'you need to sign in before continue')
+    OpenStruct.new(success?: false, result: nil, error: I18n.t('auth.not_signed_in'))
   end
 
 end

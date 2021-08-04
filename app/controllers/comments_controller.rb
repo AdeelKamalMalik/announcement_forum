@@ -4,17 +4,17 @@ class CommentsController < ApplicationController
 
   def index
     @comments = current_user.comments
-    @comments = @comments.where(post_id: @post.id) if @post
+    @comments = @comments.of_post(@post.id) if @post
     render json: @comments, status: :ok
   end
 
   def show
-    comment = @post&.comments.find_by(id: params[:id]) if @post
+    comment = @post.comments.find_by(id: params[:id]) if @post
     comment = Comment.find_by(id: params[:id]) unless @post
     if comment
       render json: comment, status: :ok
     else
-      render json: { message: 'unable to find comment' }, status: :not_found
+      render json: { message: I18n.t('comments.not_found') }, status: :not_found
     end
   end
 
@@ -38,7 +38,7 @@ class CommentsController < ApplicationController
 
   def destroy
     if @comment.destroy
-      render json: { message: 'successfully deleted' }, status: :ok
+      render json: { message: I18n.t('comments.deleted') }, status: :ok
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -49,7 +49,7 @@ class CommentsController < ApplicationController
   def set_comment
     @comment = current_user.comments.find_by(id: params[:id])
     unless @comment
-      render json: { error: 'unable to find comment' }, status: :not_found
+      render json: { error: I18n.t('comments.not_found') }, status: :not_found
     end
   end
 
@@ -61,7 +61,7 @@ class CommentsController < ApplicationController
     if params[:post_id]
       @post = Post.find_by(id: params[:post_id])
       unless @post
-        render json: { message: 'unable to find post' }
+        render json: { message: I18n.t('posts.not_found') }
       end
     end
   end

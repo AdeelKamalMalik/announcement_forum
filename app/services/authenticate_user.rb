@@ -22,7 +22,7 @@ class AuthenticateUser
     user = User.find_by_email(email)
     return user if user && user.authenticate(password)
 
-    @auth_error = 'invalid credentials'
+    @auth_error = I18n.t('auth.invalid_credentials')
     nil
   end
 end
