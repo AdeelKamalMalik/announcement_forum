@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :post do
     user { create :user }
-    content { 'TESTING CONTENT' }
+    content { Faker::Lorem.paragraph }
   end
 end

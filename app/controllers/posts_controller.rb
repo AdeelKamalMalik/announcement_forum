@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:update, :destroy]
 
   def index
-    @posts = current_user.posts
+    @posts = Post.all
     render json: @posts, status: :ok
   end
 
@@ -27,7 +27,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      render json: @post
+      render json: @post, status: :ok
     else
       render json: @post.errors, status: :unprocessable_entity
     end
