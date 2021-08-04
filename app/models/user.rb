@@ -4,7 +4,6 @@ class User < ApplicationRecord
 
   ## validations
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, :uniqueness => { :case_sensitive => false }
-  validates :password, presence: true
 
   ## callbacks
   before_save :assign_expiry
