@@ -1,24 +1,25 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## _Development Setup_
+Follow the steps below to setup and run app locally.
 
-Things you may want to cover:
+* Add Postgres Database user/password in config/database.yml
 
-* Ruby version
+* rvm install ruby-3.0.2 (You can use any ruby version above 2.7.0)
 
-* System dependencies
+* rvm use ruby-3.0.2 (You can use any ruby version above 2.7.0)
 
-* Configuration
+* gem install bundler
 
-* Database creation
+* bundler install
 
-* Database initialization
+* rake db:create
 
-* How to run the test suite
+* rake db:migreate
 
-* Services (job queues, cache servers, search engines, etc.)
+* rails server (http://localhost:3000)
 
-* Deployment instructions
+* Use POSTMAN collection to run APIs (Load Environment File in POSTMAN) - Files present in docs/ folder
 
-* ...
+## _Run Rspec_
+* rspec 
